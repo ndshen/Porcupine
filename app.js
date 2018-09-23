@@ -8,7 +8,7 @@ var routes = require('./routes/index');
 var cors =require('cors')
 
 // Connect to Database
-mongoose.connect('mongodb://rootNinja:swordtight@127.0.0.1:27020/test_711?authSource=admin', { useNewUrlParser: true });
+mongoose.connect('mongodb://rootNinja:swordtight@127.0.0.1:27020/CrawlGossiping_formal?authSource=admin', { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 

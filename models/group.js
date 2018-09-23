@@ -2,15 +2,20 @@ const mongoose = require('mongoose');
 
 //User Schema
 const groupSchema = mongoose.Schema({
-    id:{ type: Number, required:true },
-    group:{ type: Number, requred:true }
+    date:{ type: String, required:true },
+    day_range: { type: Number, required:true },
+    overall_groupID_list: { type: Array },
+    overall_groupUser_list: { type: Array },
+    overall_groupArticle_list: { type: Array },
+    overall_group_list: { type: Array, required: true }
 });
 
 const Group = module.exports = mongoose.model('Group', groupSchema, 'Group');
 
 //===========================Basic Controller===============================
 module.exports.getTopGroups = function(limit, callback){
-    Group.aggregate([{
+    Group.aggregate([
+    {
         "$group":{
             "_id":{"group":"$group"},
 	        "count":{"$sum":1},

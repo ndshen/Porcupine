@@ -18,6 +18,7 @@ router.get('/id/:_id',function(req,res){
         if(err){
             throw err;
         }
+        console.log("Someone call a user ID request "+Date.now())
         res.json(user);
     });
 });

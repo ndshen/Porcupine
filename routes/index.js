@@ -3,6 +3,8 @@ var router = express.Router();
 var articles = require('./articles');
 var users = require('./users');
 var groups = require('./groups');
+var features = require('./features')
+var visualizations = require('./visualizations')
 
 var fs = require('fs')
 
@@ -12,6 +14,8 @@ console.log("In router file.");
 router.use('/api/articles', articles);
 router.use('/api/users', users);
 router.use('/api/groups', groups);
+router.use('/api/features', features)
+router.use('/api/visual', visualizations)
 
 router.get('/api', function(req,res){
     // res.sendFile(__dirname +'/../views/document.html');
@@ -31,7 +35,7 @@ router.get('/api', function(req,res){
 router.get('/', function(req, res){
     res.send('Test Node.js server with Express');
     res.end();
-    console.log("Get a get request!");
+    console.log("Get a get request! "+Date.now());
 });
 
 router.post('/', function(req,res){
