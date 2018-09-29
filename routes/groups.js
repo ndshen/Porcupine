@@ -4,8 +4,8 @@ var express = require('express');
 var router = express.Router();
 Group = require('../models/group');
 
-router.get('/topGroup/:limit', function(req,res){
-    Group.getTopGroups(req.params.limit, function(err, groups){
+router.get('/date/:date/range/:range', function(req,res){
+    Group.getTopGroups(req.params.date, req.params.range, 50, function(err, groups){
         if(err){
             throw err;
         }

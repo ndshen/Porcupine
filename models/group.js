@@ -13,25 +13,35 @@ const groupSchema = mongoose.Schema({
 const Group = module.exports = mongoose.model('Group', groupSchema, 'Group');
 
 //===========================Basic Controller===============================
-module.exports.getTopGroups = function(limit, callback){
+module.exports.getTopGroups = function(date, day_range, min_size, callback){
     Group.aggregate([
-    {
-        "$group":{
-            "_id":{"group":"$group"},
-	        "count":{"$sum":1},
-            "userId":{"$push":"$id"}
+        {
+            "$match":{
+                "date":date,
+                "day_range":parseInt(day_range)
+            }
+        },
+        {
+            "$project":{
+                "_id": 0,
+                "overall_group_list":1
+            }
+        },
+        {
+            "$unwind": "$overall_group_list"
+        },
+        {
+            "$project":{
+                "group_id":"$overall_group_list.overall_group_id",
+                "group_count":{"$size":"$overall_group_list.overall_group_users"}
+            }
+        },
+        {
+            "$match":{
+                "group_count":{"$gt":min_size}
+            }
         }
-    },
-	{
-        "$match":{
-            "count":{"$gt":1}
-        }
-    },
-	{
-        "$sort":{"count":-1}
-    },{
-        "$limit": parseInt(limit)
-    }], callback)
+    ],callback)
 };
 
 module.exports.getUserGroup = function(id, callback){
