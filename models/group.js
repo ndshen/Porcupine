@@ -45,5 +45,49 @@ module.exports.getTopGroups = function(date, day_range, min_size, callback){
 };
 
 module.exports.getUserGroup = function(id, callback){
-    Group.find({id:id}, {group:1, _id:0}, callback)
-}
+    Group.find({id:id}, {group:1, _id:0}, callback);
+};
+
+module.exports.getGroupLeader = function(date,day_range,group_id, internal_group_id, callback){
+    console.log(date, day_range, group_id, internal_group_id);
+    Group.aggregate([
+        {
+            "$match":{
+                "date":date,
+                "day_range":day_range
+            }
+        },
+        {
+            "$project":{
+                "_id":0,
+                "group_list":"$overall_group_list"
+            }
+        },
+        {
+            "$unwind":"$group_list"
+        },
+        {
+            "$match":{
+                "group_list.overall_group_id":group_id
+            }
+        },
+        {
+            "$project":{
+                "internal_groups":"$group_list.internal_group_list"
+            }
+        },
+        {
+            "$unwind":"$internal_groups"
+        },
+        {
+            "$match":{
+                "internal_groups.internal_group_id":internal_group_id
+            }
+        },
+        {
+            "$project":{
+                "group_leaders":"$internal_groups.internal_group_leaders"
+            }
+        }
+    ], callback);
+};

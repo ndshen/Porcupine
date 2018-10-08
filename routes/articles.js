@@ -26,4 +26,14 @@ router.get('/id/:_id',function(req,res){
     });
 });
 
+router.get('/nameAndUrl/id/:id', function(req, res){
+    Article.getArticleNameandURL(req.params.id, function(err, result){
+        if(err){
+            console.log("nameAndUrl"+err);
+        }
+        res.json(result);
+    });
+});
+
+
 module.exports = router;

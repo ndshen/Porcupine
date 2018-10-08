@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 
 //Feature Schema
 const featureSchema = mongoose.Schema({
+    date:{type:String, required:true},
+    day_range:{type:Number, required:true},
     group:{ type: Number, required:true },
-    result:{ type: Array, requred:true }
+    top_keywords:{ type: Array, required:true }
 });
 
-const Feature = module.exports = mongoose.model('Feature', featureSchema, 'tempFeature');
+const Feature = module.exports = mongoose.model('Feature', featureSchema, 'Feature');
 
 //===========================Basic Controller===============================
 //Get Users
-module.exports.getGroupFeature = function(groupId, callback){
-    Feature.findOne({group:groupId}, "result -_id", callback);
+module.exports.getGroupFeature = function(date, day_range, groupId, callback){
+    Feature.findOne({date:date, day_range:day_range, group:groupId}, "top_keywords -_id", callback);
 };

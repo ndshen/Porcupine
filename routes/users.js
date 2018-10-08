@@ -33,4 +33,14 @@ router.get('/name/:name', function(req,res){
     });
 });
 
+router.get('/id/:id/getIP', function(req,res){
+    ip = parseInt(req.params.id);
+    User.getUserIP(ip, function(err, ip){
+        if(err){
+            throw err;
+        }
+        res.json(ip)
+    })
+});
+
 module.exports = router;

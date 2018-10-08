@@ -25,3 +25,7 @@ module.exports.getArticles = function(callback, limit){
 module.exports.getArticleById = function(id ,callback){
     Article.find({id:id}, callback);
 };
+
+module.exports.getArticleNameandURL = function(id, callback){
+    Article.findOne({id:id}, {_id:0, ArticleName:1, URL:1}, callback);
+};
