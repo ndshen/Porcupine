@@ -14,36 +14,29 @@ router.get('/date/:date/range/:range/group/:groupID', function(req,res){
     });
 });
 
-router.get('/date/:date/range/:range/group/:groupID/gate/:gate', function(req,res){
+router.get('/date/:date/range/:range/group/:groupID/gate/:gate', async function(req,res){
     var date = req.params.date;
     var range = parseInt(req.params.range);
     var groupID = parseInt(req.params.groupID);
     var gate = parseInt(req.params.gate)
-
-    var nodes = [];
-    Visualization.getVisualizationNodes(date, range, groupID ,function(err, visualData){
-        if(err){
-            throw err;
-        }
-        console.log("Request visual data: "+date+"_"+range+"_"+groupID);
-        // return(visualData);
-        nodes = visualData;
-        console.log(nodes)
-    });
-
-    var links = [];
-    Visualization.getVisualizationLinks(date, range, groupID, gate, function(err, result){
-        if(err){
-            throw err;
-        }
-        links = result;
-    //   return(result);
-    });
-    var resData = {
-        "nodes":nodes,
-        "links":links
+    let nodes = await Visualization.find({date:date, day_range: range, group_id:groupID}, {_id:0, nodes:1}).exec();
+    let links = await Visualization.getVisualizationLinks(date, range, groupID, gate);
+    // try{
+    //     result = {
+    //         "nodes":nodes[0].nodes,
+    //         "links":links[0].links
+    //     };
+    // }
+    // catch(error){
+    //     result = {
+    //         "success":false
+    //     }
+    // }
+    result = {
+        "nodes":nodes[0].nodes,
+        "links":links[0].links
     };
-    res.json(resData);
+    res.json(result);
 
 });
 

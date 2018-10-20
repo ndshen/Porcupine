@@ -70,7 +70,13 @@
     <div class="container">
         <h3 class="title">Get Visual Data</h3>
         <b class="method">GET</b>
-        <p><b class="Request">Request: </b>/api/visual/date/:date/range/:day_range</p>
+        <p><b class="Request">Request: </b>/api/visual/date/:date/range/:day_range/group/:GroupID</p>
+        <p><b class="Response">Response: </b>return the nodes and links of the group result of that date and day_range</p>
+    </div>
+    <div class="container">
+        <h3 class="title">Get Visual Data with weight gate</h3>
+        <b class="method">GET</b>
+        <p><b class="Request">Request: </b>/api/visual/date/:date/range/:day_range/group/:GroupID/gate/:gate</p>
         <p><b class="Response">Response: </b>return the nodes and links of the group result of that date and day_range</p>
     </div>
 

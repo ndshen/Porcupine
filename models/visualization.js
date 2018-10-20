@@ -16,12 +16,13 @@ module.exports.getVisualization = function(date, day_range, groupID,callback){
     Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1, links:1 }, callback)
 }
 
-module.exports.getVisualizationNodes = function(date, day_range, groupID,callback){
-    Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1}, callback)
+module.exports.getVisualizationNodes = async function(date, day_range, groupID){
+    let result = Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1}).exec();
+    return(result);
 }
 
-module.exports.getVisualizationLinks = function(date,day_range, groupID, gate, callback){
-    Visualization.aggregate([
+module.exports.getVisualizationLinks = async function(date,day_range, groupID, gate){
+    let result = await Visualization.aggregate([
         {
             "$match":{
                 "date":date,
@@ -56,5 +57,6 @@ module.exports.getVisualizationLinks = function(date,day_range, groupID, gate, c
                 "links":"$links"
             }
         }
-    ], callback)
+    ]).exec();
+    return(result);
 }

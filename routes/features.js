@@ -5,7 +5,7 @@ var router = express.Router();
 Feature = require('../models/feature');
 
 router.get('/date/:date/range/:range/group/:groupId', function(req,res){
-    console.log("Feature has been called")
+    console.log(req.originalUrl+" has been called.");
     range = parseInt(req.params.range);
     groupId = parseInt(req.params.groupId);
     Feature.getGroupFeature(req.params.date,range,groupId, function(err, featueList){
@@ -13,10 +13,10 @@ router.get('/date/:date/range/:range/group/:groupId', function(req,res){
             throw err;
         }
         if(featueList != null){
-            res.json(featueList)
+            res.json(featueList);
         }
         else{
-            res.json([])
+            res.json([]);
         }
     });
 });
