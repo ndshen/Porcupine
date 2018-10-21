@@ -79,6 +79,18 @@
         <p><b class="Request">Request: </b>/api/visual/date/:date/range/:day_range/group/:GroupID/gate/:gate</p>
         <p><b class="Response">Response: </b>return the nodes and links of the group result of that date and day_range</p>
     </div>
+    <div class="container">
+        <h3 class="title">Get top related articles for overall group</h3>
+        <b class="method">GET</b>
+        <p><b class="Request">Request: </b>/api/groups/topArticles/date/:date/range/:day_range/groupID/:GroupID/limit/:limit</p>
+        <p><b class="Response">Response: </b>[{"articleID":1,"name":"abcdsfsdf","url":"alsfjlskfs"}]</p>
+    </div>
+    <div class="container">
+        <h3 class="title">Get Available Time Interval</h3>
+        <b class="method">GET</b>
+        <p><b class="Request">Request: </b>/api/groups/available_time</p>
+        <p><b class="Response">Response: </b>[{"date":"2018-09-18","day_range":7}]</p>
+    </div>
 
 </body>
 </html>

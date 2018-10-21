@@ -49,7 +49,6 @@ module.exports.getUserGroup = function(id, callback){
 };
 
 module.exports.getGroupLeader = function(date,day_range,group_id, internal_group_id, callback){
-    console.log(date, day_range, group_id, internal_group_id);
     Group.aggregate([
         {
             "$match":{
@@ -86,8 +85,32 @@ module.exports.getGroupLeader = function(date,day_range,group_id, internal_group
         },
         {
             "$project":{
-                "group_leaders":"$internal_groups.internal_group_leaders"
+                "group_leaders_id":"$internal_groups.internal_group_leaders"
+            }
+        },
+        {
+            "$unwind":"$group_leaders_id"
+        },
+        {
+            "$lookup":{
+                "from":"User",
+                "localField":"group_leaders_id",
+                "foreignField":"id",
+                "as":"group_leaders_detail"
+            }
+        },
+        {
+            "$unwind":"$group_leaders_detail"
+        },
+        {
+            "$project":{
+                "group_leader_id":"$group_leaders_id",
+                "group_leader_name":"$group_leaders_detail.Name"
             }
         }
     ], callback);
+};
+
+module.exports.getAvailableTimeInterval = function(callback){
+    Group.find({"overall_group_list":{"$elemMatch":{"internal_group_list":{"$exists":true}}}},{date:1, day_range:1, _id:0}, callback);
 };
