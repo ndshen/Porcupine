@@ -107,9 +107,50 @@ module.exports.getGroupLeader = function(date,day_range,group_id, internal_group
                 "group_leader_id":"$group_leaders_id",
                 "group_leader_name":"$group_leaders_detail.Name"
             }
+        },
+        {
+            "$limit":3
         }
     ], callback);
 };
+
+module.exports.getAllGroupLeader = function(date, day_range, group_id, callback){
+    Group.aggregate([
+        {
+            "$match":{
+                "date":date,
+                "day_range":day_range
+            }
+        },
+        {
+            "$project":{
+                "_id":0,
+                "group_list":"$overall_group_list"
+            }
+        },
+        {
+            "$unwind":"$group_list"
+        },
+        {
+            "$match":{
+                "group_list.overall_group_id":group_id
+            }
+        },
+        {
+            "$project":{
+                "internal_groups":"$group_list.internal_group_list"
+            }
+        },
+        {
+            "$unwind":"$internal_groups"
+        },
+        {
+            "$project":{
+                "all_group_leaders":"$internal_groups.internal_group_leaders"
+            }
+        }
+    ], callback)
+}
 
 module.exports.getAvailableTimeInterval = function(callback){
     Group.find({"overall_group_list":{"$elemMatch":{"internal_group_list":{"$exists":true}}}},{date:1, day_range:1, _id:0}, callback);

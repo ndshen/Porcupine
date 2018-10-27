@@ -6,7 +6,7 @@ Group = require('../models/group');
 Group_Info = require('../models/overall_group');
 
 router.get('/date/:date/range/:range', function(req,res){
-    Group.getTopGroups(req.params.date, req.params.range, 50, function(err, groups){
+    Group.getTopGroups(req.params.date, req.params.range, 20, function(err, groups){
         if(err){
             throw err;
         }
@@ -37,6 +37,19 @@ router.get('/leaders/date/:date/range/:range/groupID/:group_id/internalGroupId/:
     });
 });
 
+router.get('/leaders/date/:date/range/:range/groupID/:group_id/all', function(req,res){
+    date = req.params.date;
+    range = parseInt(req.params.range);
+    groupID = parseInt(req.params.group_id);
+    Group.getAllGroupLeader(date, range, groupID, function(err, leaders){
+        if (err){
+            throw err;
+        }
+        console.log("all group leaders");
+        res.json(leaders);
+    });
+});
+
 
 router.get('/topArticles/date/:date/range/:range/groupID/:group_id/limit/:limit', function(req,res){
     date = req.params.date;
@@ -48,6 +61,7 @@ router.get('/topArticles/date/:date/range/:range/groupID/:group_id/limit/:limit'
             throw err;
         }
         console.log("Top Articles for Overall Group");
+        // console.log(results)
         res.json(results);
     });
 });
