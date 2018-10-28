@@ -18,7 +18,8 @@ module.exports.getTopGroups = function(date, day_range, min_size, callback){
         {
             "$match":{
                 "date":date,
-                "day_range":parseInt(day_range)
+                "day_range":parseInt(day_range),
+                "official":1
             }
         },
         {
@@ -53,7 +54,8 @@ module.exports.getGroupLeader = function(date,day_range,group_id, internal_group
         {
             "$match":{
                 "date":date,
-                "day_range":day_range
+                "day_range":day_range,
+                "official":1
             }
         },
         {
@@ -119,7 +121,8 @@ module.exports.getAllGroupLeader = function(date, day_range, group_id, callback)
         {
             "$match":{
                 "date":date,
-                "day_range":day_range
+                "day_range":day_range,
+                "official":1
             }
         },
         {
@@ -150,8 +153,54 @@ module.exports.getAllGroupLeader = function(date, day_range, group_id, callback)
             }
         }
     ], callback)
+};
+
+module.exports.get_inter_articles = async function(date, day_range, group_id, internal_group_id){
+    let result = await Group.aggregate([
+        {
+            "$match":{
+                "date":date,
+                "day_range":day_range,
+                "official":1
+            }
+        },
+        {
+            "$project":{
+                "_id":0,
+                "group_list":"$overall_group_list"
+            }
+        },
+        {
+            "$unwind":"$group_list"
+        },
+        {
+            "$match":{
+                "group_list.overall_group_id":group_id
+            }
+        },
+        {
+            "$project":{
+                "internal_groups":"$group_list.internal_group_list"
+            }
+        },
+        {
+            "$unwind":"$internal_groups"
+        },
+        {
+            "$match":{
+                "internal_groups.internal_group_id":internal_group_id
+            }
+        },
+        {
+            "$project":{
+                "push":"$internal_groups.internal_top_articles.top_push",
+                "boo":"$internal_groups.internal_top_articles.top_boo"
+            }
+        }
+    ]).exec();
+    return(result);
 }
 
 module.exports.getAvailableTimeInterval = function(callback){
-    Group.find({"overall_group_list":{"$elemMatch":{"internal_group_list":{"$exists":true}}}},{date:1, day_range:1, _id:0}, callback);
+    Group.find({"overall_group_list":{"$elemMatch":{"internal_group_list":{"$exists":true}}}, "official":1},{date:1, day_range:1, _id:0}, callback);
 };

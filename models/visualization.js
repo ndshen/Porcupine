@@ -17,7 +17,7 @@ module.exports.getVisualization = function(date, day_range, groupID,callback){
 }
 
 module.exports.getVisualizationNodes = async function(date, day_range, groupID){
-    let result = Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1}).exec();
+    let result = await Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1}).exec();
     return(result);
 }
 
