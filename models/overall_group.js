@@ -18,7 +18,8 @@ module.exports.getGroupTopArticle = function(date, day_range, groupID, limit, ca
             "$match":{
                 "date":date,
                 "day_range":day_range,
-                "group_id":groupID
+                "group_id":groupID,
+                "official":1
             }
         },
         {

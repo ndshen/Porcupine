@@ -39,7 +39,8 @@ module.exports.getTopGroups = function(date, day_range, min_size, callback){
         },
         {
             "$match":{
-                "group_count":{"$gt":min_size}
+                "group_count":{"$gt":min_size},
+                "group_id":{"$ne":0}
             }
         }
     ],callback)

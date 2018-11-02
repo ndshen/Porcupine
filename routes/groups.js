@@ -11,7 +11,7 @@ router.get('/date/:date/range/:range', function(req,res){
         if(err){
             throw err;
         }
-        res.json(groups)
+        res.json(groups);
     });
 });
 
@@ -44,21 +44,32 @@ router.get('/leaders/date/:date/range/:range/groupID/:group_id/internalGroupId/:
     groupID = parseInt(req.params.group_id);
     internalID = parseInt(req.params.internalId);
     let result = await Group.get_inter_articles(date, range, groupID, internalID);
-    // console.log(result);
-    
+    // console.log("result", result);
+    // res.json(result)
+    if (result == []){
+        res.json([])
+    }
+    if (result[0]["push"].length < 5 || result[0]["boo"].length < 5){
+        res.json([])
+    }
+
     let push = result[0]["push"];
     let boo = result[0]["boo"];
     var pushArt = [];
     var booArt = [];
 
+    // console.log("push", push.length);
+    // console.log("boo", boo.length)
+
     for(i=0; i<5; i++){
-        console.log(push[i]);
-        let pushName = await Article.findOne({id:push[i]},{_id:0, ArticleName:1}).exec();
+        // console.log(push[i]);
+        let pushName = await Article.findOne({id:push[i]},{_id:0, ArticleName:1, URL:1}).exec();
         pushName = JSON.stringify(pushName);
-        let booName = await Article.findOne({id:boo[i]},{_id:0, ArticleName:1}).exec();
+        console.log(pushName)
+        let booName = await Article.findOne({id:boo[i]},{_id:0, ArticleName:1, URL:1}).exec();
         booName = JSON.stringify(booName);
-        pushArt.push(JSON.parse(pushName)["ArticleName"]);
-        booArt.push(JSON.parse(booName)["ArticleName"]);
+        pushArt.push(JSON.parse(pushName));
+        booArt.push(JSON.parse(booName));
     }
 
     finalResult = {

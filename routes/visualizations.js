@@ -19,7 +19,7 @@ router.get('/date/:date/range/:range/group/:groupID/gate/:gate', async function(
     var range = parseInt(req.params.range);
     var groupID = parseInt(req.params.groupID);
     var gate = parseInt(req.params.gate)
-    let nodes = await Visualization.find({date:date, day_range: range, group_id:groupID}, {_id:0, nodes:1}).exec();
+    let nodes = await Visualization.find({date:date, day_range: range, group_id:groupID, official:1}, {_id:0, nodes:1}).exec();
     let links = await Visualization.getVisualizationLinks(date, range, groupID, gate);
     // try{
     //     result = {

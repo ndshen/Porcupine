@@ -13,5 +13,5 @@ const Feature = module.exports = mongoose.model('Feature', featureSchema, 'Featu
 //===========================Basic Controller===============================
 //Get Users
 module.exports.getGroupFeature = function(date, day_range, groupId, callback){
-    Feature.findOne({date:date, day_range:day_range, group:groupId}, "top_keywords -_id", callback);
+    Feature.findOne({date:date, day_range:day_range, group:groupId, official:1}, "top_keywords -_id", callback);
 };

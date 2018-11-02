@@ -13,11 +13,11 @@ const Visualization = module.exports = mongoose.model('Visualization', visualSch
 
 //===========================Basic Controller===============================
 module.exports.getVisualization = function(date, day_range, groupID,callback){
-    Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1, links:1 }, callback)
+    Visualization.find({date:date, day_range: day_range, group_id:groupID, official:1}, {_id:0, nodes:1, links:1 }, callback)
 }
 
 module.exports.getVisualizationNodes = async function(date, day_range, groupID){
-    let result = await Visualization.find({date:date, day_range: day_range, group_id:groupID}, {_id:0, nodes:1}).exec();
+    let result = await Visualization.find({date:date, day_range: day_range, group_id:groupID, official:1}, {_id:0, nodes:1}).exec();
     return(result);
 }
 
@@ -27,7 +27,8 @@ module.exports.getVisualizationLinks = async function(date,day_range, groupID, g
             "$match":{
                 "date":date,
                 "day_range":day_range,
-                "group_id":groupID
+                "group_id":groupID,
+                "official":1
             }
         },
         {
